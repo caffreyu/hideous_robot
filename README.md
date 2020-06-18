@@ -12,7 +12,7 @@ Create a new empty directory in your home folder.
 Go to the src folder of the new workspace you just created.
 3. git clone https://github.com/caffreyu/hideous_robot.git \
 Clone this repo to your src folder. 
-4. cd .. && catkin_make\
+4. cd hideous_robot && catkin_make\
 Compile this repo.
 5. source devel/setup.bash \
 Source the setup file to make the launch files ready for launch commends. 
