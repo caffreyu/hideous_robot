@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>hideous_robot</name>
+  <version>1.2.0</version>
+  <description>Hideous robot model for testing point cloud data</description>
+  <license>Apache 2.0</license>
+  <author email="caffreyu@gmail.com">Caffrey Yu</author>
+  <maintainer email="caffreyu@gmail.com">Caffrey Yu</maintainer>
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>rospy</depend>
+  <depend>std_msgs</depend>
+  <depend>sensor_msgs</depend>
+  <depend>geometry_msgs</depend>
+  <depend>nav_msgs</depend>
+  <depend>tf</depend>
+  <depend>gazebo_ros</depend>
+  <depend>gazebo_ros_controller</depend>
+  <depend>xacro</depend>
+  <depend>urdf</depend>
+  
+  <exec_depend>gazebo</exec_depend>
+</package>

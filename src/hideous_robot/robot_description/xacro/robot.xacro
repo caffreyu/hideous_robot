@@ -1,0 +1,242 @@
+<?xml version="1.0"?>
+<robot name="hideous_robot" xmlns:xacro="http://www.ros.org/wiki/xacro">
+        <!-- Put here the robot description -->
+<xacro:property name="PI" value="3.1415926535897931"/>
+<xacro:property name="gpu" value="false" />
+
+<xacro:property name="chassisHeight" value="0.1"/>
+<xacro:property name="chassisLength" value="0.4"/>
+<xacro:property name="chassisWidth" value="0.2"/>
+<xacro:property name="chassisMass" value="5"/>
+
+<xacro:property name="casterRadius" value="0.05"/>
+<xacro:property name="casterMass" value="3"/>
+
+<xacro:property name="wheelWidth" value="0.05"/>
+<xacro:property name="wheelRadius" value="0.1"/>
+<xacro:property name="wheelPos" value="0.2"/>
+<xacro:property name="wheelMass" value="2"/>
+
+<xacro:property name="cameraSize" value="0.05"/>
+<xacro:property name="cameraMass" value="0.1"/>
+<xacro:include filename="$(find hideous_robot)/robot_description/xacro/robot.gazebo" />
+<xacro:include filename="$(find hideous_robot)/robot_description/xacro/material.xacro" />
+<xacro:include filename="$(find hideous_robot)/robot_description/xacro/macros.xacro" />
+<link name="hideous_robot_link" />
+
+<joint name="base_joint" type="fixed">
+  <parent link="hideous_robot_link"/>
+  <child link="hideous_robot_chassis"/>
+</joint>
+<link name='hideous_robot_chassis'>
+  <collision> 
+    <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+    <geometry> 
+      <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
+    </geometry> 
+  </collision>
+  <visual> 
+    <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+    <geometry> 
+      <box size="${chassisLength} ${chassisWidth} ${chassisHeight}"/> 
+    </geometry> 
+    <material name="orange"/>
+  </visual>
+  <inertial> 
+    <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0"/> 
+    <mass value="${chassisMass}"/> 
+    <box_inertia m="${chassisMass}" x="${chassisLength}" y="${chassisWidth}" z="${chassisHeight}"/>
+  </inertial>
+</link>
+<joint name="fixed" type="fixed">
+  <parent link="hideous_robot_chassis"/>
+  <child link="hideous_robot_caster_wheel"/>
+</joint>
+
+<link name="hideous_robot_caster_wheel">
+  <collision>
+    <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="${casterRadius}"/>
+    </geometry>
+  </collision>
+  
+  <visual>
+    <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+    <geometry>
+      <sphere radius="${casterRadius}"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+
+  <inertial>
+    <origin xyz="${casterRadius-chassisLength/2} 0 ${casterRadius-chassisHeight+wheelRadius}" rpy="0 0 0"/>
+    <mass value="${casterMass}"/>
+    <sphere_inertia m="${casterMass}" r="${casterRadius}"/>
+  </inertial>
+</link>
+<link name="hideous_robot_left_wheel">
+  <collision>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <geometry>
+      <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+    </geometry>
+  </collision>
+
+  <visual>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <geometry>
+      <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <mass value="${wheelMass}"/>
+    <cylinder_inertia m="${wheelMass}" r="${wheelRadius}" h="${wheelWidth}"/>
+  </inertial>
+</link>
+
+<joint name="hideous_robot_left_wheel_hinge" type="continuous">
+  <parent link="hideous_robot_chassis"/>
+  <child link="hideous_robot_left_wheel"/>
+<origin xyz="${-wheelPos+chassisLength/2} ${1*wheelWidth/2+1*chassisWidth/2} ${wheelRadius}" rpy="0 0 0" />
+  <axis xyz="0 1 0" rpy="0 0 0" />
+  <limit effort="100" velocity="100"/>
+  <joint_properties damping="0.0" friction="0.0"/>
+</joint>
+
+
+<transmission name="left_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="hideous_robot_left_wheel_hinge"> 
+  	<hardwareInterface>EffortJointInterface</hardwareInterface>
+  </joint>
+  <actuator name="leftMotor">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+<link name="hideous_robot_right_wheel">
+  <collision>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <geometry>
+      <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+    </geometry>
+  </collision>
+
+  <visual>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <geometry>
+      <cylinder length="${wheelWidth}" radius="${wheelRadius}"/>
+    </geometry>
+    <material name="white"/>
+  </visual>
+
+  <inertial>
+    <origin xyz="0 0 0" rpy="0 ${PI/2} ${PI/2}" />
+    <mass value="${wheelMass}"/>
+    <cylinder_inertia m="${wheelMass}" r="${wheelRadius}" h="${wheelWidth}"/>
+  </inertial>
+</link>
+
+<joint name="hideous_robot_right_wheel_hinge" type="continuous">
+  <parent link="hideous_robot_chassis"/>
+  <child link="hideous_robot_right_wheel"/>
+<origin xyz="${-wheelPos+chassisLength/2} ${-1*wheelWidth/2+(-1)*chassisWidth/2} ${wheelRadius}" rpy="0 0 0" />
+  <axis xyz="0 1 0" rpy="0 0 0" />
+  <limit effort="100" velocity="100"/>
+  <joint_properties damping="0.0" friction="0.0"/>
+</joint>
+
+
+<transmission name="right_trans">
+  <type>transmission_interface/SimpleTransmission</type>
+  <joint name="hideous_robot_right_wheel_hinge">
+  <hardwareInterface>EffortJointInterface</hardwareInterface>
+   </joint>
+  <actuator name="rightMotor">
+    <hardwareInterface>EffortJointInterface</hardwareInterface>
+    <mechanicalReduction>1</mechanicalReduction>
+  </actuator>
+</transmission>
+
+<link name="camera_link_back">
+    <collision>
+      <origin xyz="0.205 0 0" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hideous_robot/models/meshes/realsense.dae" />
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="camera_joint_back" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="0.20495 0 .06" rpy="0 0 0"/>
+    <parent link="hideous_robot_chassis"/>
+    <child link="camera_link_back"/>
+  </joint>
+
+  <joint name="camera_optical_joint_back" type="fixed">
+    <origin xyz="1 0 0" rpy="-1.5708 0 -1.5708"/>
+    <parent link="camera_link_back"/>
+    <child link="camera_link_optical_back"/>
+  </joint>
+
+  <link name="camera_link_optical_back">
+  </link>
+
+  <link name="camera_link_front">
+    <collision>
+      <origin xyz="-0.205 0 0.06" rpy="0 0 0"/>
+      <geometry>
+        <box size="0.1 0.1 0.1"/>
+      </geometry>
+    </collision>
+    <visual>
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <geometry>
+        <mesh filename="package://hideous_robot/models/meshes/realsense.dae" />
+      </geometry>
+    </visual>
+    <inertial>
+      <mass value="1e-5" />
+      <origin xyz="0 0 0" rpy="0 0 0"/>
+      <inertia ixx="1e-6" ixy="0" ixz="0" iyy="1e-6" iyz="0" izz="1e-6" />
+    </inertial>
+  </link>
+
+  <joint name="camera_joint_front" type="fixed">
+    <axis xyz="0 1 0" />
+    <origin xyz="-0.20495 0 .06" rpy="0 0 3.14159"/>
+    <parent link="hideous_robot_chassis"/>
+    <child link="camera_link_front"/>
+  </joint>
+
+  <joint name="camera_optical_joint_front" type="fixed">
+    <origin xyz="-1 0 0" rpy="-1.5708 0 -1.5708"/>
+    <parent link="camera_link_front"/>
+    <child link="camera_link_optical_front"/>
+  </joint>
+
+  <link name="camera_link_optical_front">
+  </link>
+
+  <xacro:include filename="$(find hideous_robot)/robot_description/xacro/VLP-16.urdf.xacro"/>
+  <VLP-16 parent="hideous_robot_chassis" name="velodyne" topic="/velodyne_points" hz="10" samples="440" gpu="${gpu}">
+    <origin xyz="0 0 0.4" rpy="0 0 0" />
+  </VLP-16>
+
+</robot>
