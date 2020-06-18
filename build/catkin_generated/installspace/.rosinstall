@@ -1,0 +1,2 @@
+- setup-file:
+    local-name: /home/ros/pcl_ws/src/hideous_robot/install/setup.sh

@@ -190,7 +190,7 @@
   </joint>
 
   <joint name="camera_optical_joint_back" type="fixed">
-    <origin xyz="1 0 0" rpy="-1.5708 0 -1.5708"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
     <parent link="camera_link_back"/>
     <child link="camera_link_optical_back"/>
   </joint>
@@ -226,7 +226,7 @@
   </joint>
 
   <joint name="camera_optical_joint_front" type="fixed">
-    <origin xyz="-1 0 0" rpy="-1.5708 0 -1.5708"/>
+    <origin xyz="0 0 0" rpy="-1.5708 0 -1.5708"/>
     <parent link="camera_link_front"/>
     <child link="camera_link_optical_front"/>
   </joint>

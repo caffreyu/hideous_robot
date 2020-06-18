@@ -1,0 +1,2 @@
+hideous_robot:velodyne_gazebo_plugins
+-DCATKIN_DEVEL_PREFIX=/home/ros/pcl_ws/src/hideous_robot/devel -DCMAKE_INSTALL_PREFIX=/home/ros/pcl_ws/src/hideous_robot/install -G Unix Makefiles
